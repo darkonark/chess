@@ -35,7 +35,7 @@ class pawn {
 	public:
 //	void initiate (button interrupt)
 };
-const char topking = 'K';
+const string K = "topking";
 const char topqueen = 'Q';
 const char toprook = 'R';
 const char topbishop = 'B';
@@ -54,16 +54,34 @@ void printboard (void){
 	int col, row;
 	
 	for (row = 0; row <8; row++){
-		
 		for (col =0; col <8; col++){
 			cout<<" "<<board[row][col];
 		}
-		cout<<endl;}}
-//end of printboard function
+		cout<<endl;}
+}//end of printboard function
 
 int main() {
 	int turnNo = 0;
-
-printboard();
-
+	string command;
+	cout<<"chess test, commands are 'print' and 'exit'"<<endl;
+	cout<<"or enter a coordinate to activate a peice"<<endl;
+	cout<<"follow your command with the RETURN key"<<endl;
+	while(1){ //this is supposed to be an infinite loop
+	getline(cin,command);
+	if (command.substr(0,4) == "exit")
+		{
+		break;
+		}
+	if (command.substr(0,5) == "print")
+		{
+		printboard();
+		continue;
+		}
+	if (command.substr(0, 1) >= "a" && command.substr(0, 1) <= "h" && command.substr(1, 1) >= "1" && command.substr(1, 1) <= "8")
+		{
+		cout<<"coordiate"<<endl;
+		}
+	else{ cout<<"invalid, try another command"<<endl;
+		}
+	} //end of the main loop
 return 0;}
