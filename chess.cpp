@@ -2,44 +2,11 @@
 #include<string>
 using namespace std;
 string command;
-char id, idd;
+char id;
 int rowpass, colpass, lightrowpass, lightcolpass;
-char board [8][8] = {{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
-char lightboard[8][8] ={{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
+char board [8][8] = {{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','B','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
+char lightboard[8][8] ={{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','B','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
 bool pa =0, pb= 0, pc =0, pd =0, pe =0, pf =0, pg =0, ph =0, PA =0, PB =0, PC =0, PD =0, PE =0, PF =0, PG =0, PH = 0;
-
-class piece {
-	public:
-	//stuff
-};
-class king {
-	public:
-//	void initiate (button interrupt)
-};
-class queen {
-	public:
-//	void initiate (button interrupt)
-};
-class bishop {
-	public:
-//	void initiate (button interrupt)
-};
-class knight {
-	public:
-//	void initiate (button interrupt)
-};
-class rook {
-	public:
-//	void initiate (button interrupt)
-};
-class pawn {
-	public:
-
-//	void initiate (button interrupt)
-};
-
-
-
 void printboard (void){
 	int col, row;	
 	cout<<"    Board"<<endl;
@@ -58,7 +25,6 @@ void printlightboard (void){
 		}
 		cout<<endl;}
 }//end of printlightboard function
-
 char identify (string command){//identify piece function
 	int col, row;
 	if (command.substr(0,1) == "a"){
@@ -113,7 +79,6 @@ char identify (string command){//identify piece function
 	colpass = col;
 	return board[row][col];
 }//end of piece identifying function
-
 char cando (string command){
 	int col, row;
 	if (command.substr(0,1) == "a"){
@@ -168,7 +133,6 @@ char cando (string command){
 	lightcolpass = col;
 	return lightboard[row][col];
 }//end of CanDo functiom
-
 void lightreset(void){
 	int col, row;	
 	for (row = 0; row <8; row++){
@@ -178,7 +142,26 @@ void lightreset(void){
 	}
 		printlightboard();
 }//end of lightreset function
-
+bool seeiflowercase(int row,int col){
+	if(board[row][col] =='k' || board[row][col] =='q' || board[row][col] =='b' || board[row][col] =='r' || board[row][col] =='n' || board[row][col] =='p' )
+	{
+	return true;
+	}
+	else
+		{
+		return false;
+		}
+}//end of see_if_lower_case function
+bool seeifuppercase(int row,int col){
+	if(board[row][col] =='K' || board[row][col] =='Q' || board[row][col] =='B' || board[row][col] =='R' || board[row][col] =='N' || board[row][col] =='P' )
+	{
+	return true;
+	}
+	else
+		{
+		return false;
+		}
+}//end of see_if_upper_case function
 int pawntick(bool used){ //dependancy of pawndistance function
 	if (used == 0)
 		{
@@ -285,15 +268,15 @@ void lowercasepawnmove(void){
 int pawnstep = pawndistance();
 		int steps = 0;
 		while (steps < pawnstep && rowpass != 0){
-if (board[rowpass -1][colpass +1] == 'P' || board[rowpass -1][colpass +1] == 'R' || board[rowpass -1][colpass +1] == 'N' || board[rowpass -1][colpass +1] == 'B' || board[rowpass -1][colpass +1] == 'K' || lightboard[rowpass -1][colpass +1] == 'Q')
+if (seeifuppercase(rowpass -1,colpass +1))
 			{
 			lightboard[rowpass -1][colpass +1] = 'X';
 			}
-		if (board[rowpass -1][colpass -1] == 'P' || board[rowpass -1][colpass -1] == 'R' || board[rowpass -1][colpass -1] == 'N' || board[rowpass -1][colpass -1] == 'B' || board[rowpass -1][colpass -1] == 'K' || board[rowpass -1][colpass -1] == 'Q')
+		if (seeifuppercase(rowpass -1,colpass -1))
 			{
 			lightboard[rowpass -1][colpass -1] = 'X';
 			}
-			if (rowpass+steps >0 && board[rowpass+1][colpass] != 'P' && board[rowpass+1][colpass] != 'R' && board[rowpass+1][colpass] != 'N' && board[rowpass+1][colpass] != 'B' && board[rowpass+1][colpass] != 'Q' && board[rowpass+1][colpass] != 'K')
+			if (rowpass+steps >0 && seeifuppercase(rowpass+1,colpass) == false)
 				{
 				if (lightboard[rowpass-(steps+1)][colpass] == '.')
 					{
@@ -310,15 +293,15 @@ void uppercasepawnmove(void){
 int pawnstep = pawndistance();
 		int steps = 0;
 		while (steps < pawnstep && rowpass != 7){
-		if (board[rowpass +1][colpass +1] == 'p' || board[rowpass +1][colpass +1] == 'r' || board[rowpass +1][colpass +1] == 'n' || board[rowpass +1][colpass +1] == 'b' || board[rowpass +1][colpass +1] == 'k' || lightboard[rowpass +1][colpass +1] == 'q')
+		if (seeiflowercase(rowpass +1,colpass +1))
 			{
 			lightboard[rowpass +1][colpass +1] = 'X';
 			}
-		if (board[rowpass +1][colpass -1] == 'p' || board[rowpass +1][colpass -1] == 'r' || board[rowpass +1][colpass -1] == 'n' || board[rowpass +1][colpass -1] == 'b' || board[rowpass +1][colpass -1] == 'k' || board[rowpass +1][colpass -1] == 'q')
+		if (seeiflowercase(rowpass +1,colpass -1))
 			{
 			lightboard[rowpass +1][colpass -1] = 'X';
 			}
-			if (rowpass+steps <7 && board[rowpass+1][colpass] != 'P' && board[rowpass+1][colpass] != 'R' && board[rowpass+1][colpass] != 'N' && board[rowpass+1][colpass] != 'B' && board[rowpass+1][colpass] != 'Q' && board[rowpass+1][colpass] != 'K')
+			if (rowpass+steps <7 && seeifuppercase(rowpass+1,colpass) == false)
 				{
 				if (lightboard[rowpass+(steps+1)][colpass] == '.')
 					{
@@ -335,7 +318,7 @@ void upperrookmove(void){
 	
 	//DOWN LOOP (going + in array row)
 	while (downrow < 7){
-		if (board[downrow +1][colpass] == 'K' || board[downrow +1][colpass] == 'Q' || board[downrow +1][colpass] == 'B' || board[downrow +1][colpass] == 'R' || board[downrow +1][colpass] == 'N' || board[downrow +1][colpass] == 'P')
+		if (seeifuppercase(downrow +1,colpass))
 			{
 			break;
 			}
@@ -343,7 +326,7 @@ void upperrookmove(void){
 			{
 			lightboard[downrow +1][colpass] = 'Y';
 			}
-		else if (board[downrow +1][colpass] == 'k' || board[downrow +1][colpass] == 'q' || board[downrow +1][colpass] == 'b' || board[downrow +1][colpass] == 'r' || board[downrow +1][colpass] == 'n' || board[downrow +1][colpass] == 'p')
+		else if (seeiflowercase(downrow +1,colpass))
 			{
 			lightboard[downrow +1][colpass] = 'X';
 			break;
@@ -352,7 +335,7 @@ void upperrookmove(void){
 	}
 	//UP LOOP (going - in array row)
 	while (uprow >0){
-		if (board[uprow -1][colpass] == 'K' || board[uprow -1][colpass] == 'Q' || board[uprow -1][colpass] == 'B' || board[uprow -1][colpass] == 'R' || board[uprow -1][colpass] == 'N' || board[uprow -1][colpass] == 'P')
+		if (seeifuppercase(uprow -1,colpass))
 			{
 			break;
 			}
@@ -360,7 +343,7 @@ void upperrookmove(void){
 			{
 			lightboard[uprow - 1][colpass] = 'Y';
 			}
-		else if (board[uprow -1][colpass] == 'k' || board[uprow -1][colpass] == 'q' || board[uprow -1][colpass] == 'b' || board[uprow -1][colpass] == 'r' || board[uprow -1][colpass] == 'n' || board[uprow -1][colpass] == 'p')
+		else if (seeiflowercase(uprow -1,colpass))
 			{
 			lightboard[uprow -1][colpass] = 'X';
 			break;
@@ -369,7 +352,7 @@ void upperrookmove(void){
 	}
 	//LEFT LOOP
 	while(leftcol >0){
-		if(board[rowpass][leftcol -1] =='K' || board[rowpass][leftcol -1] =='Q' || board[rowpass][leftcol -1] =='B' || board[rowpass][leftcol -1] =='R' || board[rowpass][leftcol -1] =='N' || board[rowpass][leftcol -1] =='P')
+		if(seeifuppercase(rowpass,leftcol -1))
 			{
 			break;
 			}
@@ -377,7 +360,7 @@ void upperrookmove(void){
 			{
 			lightboard[rowpass][leftcol -1] ='Y';
 			}
-		else if (board[rowpass][leftcol -1] =='k' || board[rowpass][leftcol -1] =='q' || board[rowpass][leftcol -1] =='b' || board[rowpass][leftcol -1] =='r' || board[rowpass][leftcol -1] =='n' || board[rowpass][leftcol -1] =='p')
+		else if (seeiflowercase(rowpass,leftcol -1))
 			{
 			lightboard[rowpass][leftcol -1] ='X';
 			break;
@@ -386,7 +369,7 @@ void upperrookmove(void){
 	}
 	//RIGHT LOOP
 	while(rightcol < 7){
-		if (board[rowpass][rightcol +1] =='K' || board[rowpass][rightcol +1] =='Q' || board[rowpass][rightcol +1] =='B' || board[rowpass][rightcol +1] =='R' || board[rowpass][rightcol +1] =='N' || board[rowpass][rightcol +1] =='P')
+		if (seeifuppercase(rowpass,rightcol +1))
 			{
 			break;
 			}
@@ -394,7 +377,7 @@ void upperrookmove(void){
 			{
 			lightboard[rowpass][rightcol +1] = 'Y';
 			}
-		else if(board[rowpass][rightcol +1] =='k' || board[rowpass][rightcol +1] =='q' || board[rowpass][rightcol +1] =='b' || board[rowpass][rightcol +1] =='r' || board[rowpass][rightcol +1] =='n' || board[rowpass][rightcol +1] =='p')
+		else if(seeiflowercase(rowpass,rightcol +1))
 			{
 			lightboard[rowpass][rightcol +1] = 'X';
 			break;
@@ -411,7 +394,7 @@ void lowerrookmove(void){
 	
 	//DOWN LOOP (going + in array row)
 	while (downrow < 7){
-		if (board[downrow +1][colpass] == 'k' || board[downrow +1][colpass] == 'q' || board[downrow +1][colpass] == 'b' || board[downrow +1][colpass] == 'r' || board[downrow +1][colpass] == 'n' || board[downrow +1][colpass] == 'p')
+		if (seeiflowercase(downrow +1,colpass))
 			{
 			break;
 			}
@@ -419,7 +402,7 @@ void lowerrookmove(void){
 			{
 			lightboard[downrow +1][colpass] = 'Y';
 			}
-		else if (board[downrow +1][colpass] == 'K' || board[downrow +1][colpass] == 'Q' || board[downrow +1][colpass] == 'B' || board[downrow +1][colpass] == 'R' || board[downrow +1][colpass] == 'N' || board[downrow +1][colpass] == 'P')
+		else if (seeifuppercase(downrow +1,colpass))
 			{
 			lightboard[downrow +1][colpass] = 'X';
 			break;
@@ -428,7 +411,7 @@ void lowerrookmove(void){
 	}
 	//UP LOOP (going - in array row)
 	while (uprow >0){
-		if (board[uprow -1][colpass] == 'k' || board[uprow -1][colpass] == 'q' || board[uprow -1][colpass] == 'b' || board[uprow -1][colpass] == 'r' || board[uprow -1][colpass] == 'n' || board[uprow -1][colpass] == 'p')
+		if (seeiflowercase(uprow -1,colpass))
 			{
 			break;
 			}
@@ -436,7 +419,7 @@ void lowerrookmove(void){
 			{
 			lightboard[uprow - 1][colpass] = 'Y';
 			}
-		else if (board[uprow -1][colpass] == 'K' || board[uprow -1][colpass] == 'Q' || board[uprow -1][colpass] == 'B' || board[uprow -1][colpass] == 'R' || board[uprow -1][colpass] == 'N' || board[uprow -1][colpass] == 'P')
+		else if (seeifuppercase(uprow -1,colpass))
 			{
 			lightboard[uprow -1][colpass] = 'X';
 			break;
@@ -445,7 +428,7 @@ void lowerrookmove(void){
 	}
 	//LEFT LOOP
 	while(leftcol >0){
-		if(board[rowpass][leftcol -1] =='k' || board[rowpass][leftcol -1] =='q' || board[rowpass][leftcol -1] =='b' || board[rowpass][leftcol -1] =='r' || board[rowpass][leftcol -1] =='n' || board[rowpass][leftcol -1] =='p')
+		if(seeiflowercase(rowpass,leftcol -1))
 			{
 			break;
 			}
@@ -453,7 +436,7 @@ void lowerrookmove(void){
 			{
 			lightboard[rowpass][leftcol -1] ='Y';
 			}
-		else if (board[rowpass][leftcol -1] =='K' || board[rowpass][leftcol -1] =='Q' || board[rowpass][leftcol -1] =='B' || board[rowpass][leftcol -1] =='R' || board[rowpass][leftcol -1] =='N' || board[rowpass][leftcol -1] =='P')
+		else if (seeifuppercase(rowpass,leftcol -1))
 			{
 			lightboard[rowpass][leftcol -1] ='X';
 			break;
@@ -462,7 +445,7 @@ void lowerrookmove(void){
 	}
 	//RIGHT LOOP
 	while(rightcol < 7){
-		if (board[rowpass][rightcol +1] =='k' || board[rowpass][rightcol +1] =='q' || board[rowpass][rightcol +1] =='b' || board[rowpass][rightcol +1] =='r' || board[rowpass][rightcol +1] =='n' || board[rowpass][rightcol +1] =='p')
+		if (seeiflowercase(rowpass,rightcol +1))
 			{
 			break;
 			}
@@ -470,7 +453,7 @@ void lowerrookmove(void){
 			{
 			lightboard[rowpass][rightcol +1] = 'Y';
 			}
-		else if(board[rowpass][rightcol +1] =='K' || board[rowpass][rightcol +1] =='Q' || board[rowpass][rightcol +1] =='B' || board[rowpass][rightcol +1] =='R' || board[rowpass][rightcol +1] =='N' || board[rowpass][rightcol +1] =='P')
+		else if(seeifuppercase(rowpass,rightcol +1))
 			{
 			lightboard[rowpass][rightcol +1] = 'X';
 			break;
@@ -488,7 +471,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass+2][colpass+1] = 'Y';
 			}
-		else if (board[rowpass+2][colpass+1] =='k' || board[rowpass+2][colpass+1] =='q' || board[rowpass+2][colpass+1] =='b' || board[rowpass+2][colpass+1] =='r' ||board[rowpass+2][colpass+1] =='n' || board[rowpass+2][colpass+1] =='p')
+		else if (seeiflowercase(rowpass+2,colpass+1))
 			{
 			lightboard[rowpass+2][colpass+1] = 'X';
 			}
@@ -499,7 +482,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass+2][colpass-1] = 'Y';
 			}
-		else if (board[rowpass+2][colpass-1] =='k' || board[rowpass+2][colpass-1] =='q' || board[rowpass+2][colpass-1] =='b' || board[rowpass+2][colpass-1] =='r' ||board[rowpass+2][colpass-1] =='n' || board[rowpass+2][colpass-1] =='p')
+		else if (seeiflowercase(rowpass+2,colpass-1))
 			{
 			lightboard[rowpass+2][colpass-1] = 'X';
 			}
@@ -510,7 +493,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass-2][colpass+1] = 'Y';
 			}
-		else if (board[rowpass-2][colpass+1] =='k' || board[rowpass-2][colpass+1] =='q' || board[rowpass-2][colpass+1] =='b' || board[rowpass-2][colpass+1] =='r' ||board[rowpass-2][colpass+1] =='n' || board[rowpass-2][colpass+1] =='p')
+		else if (seeiflowercase(rowpass-2,colpass+1))
 			{
 			lightboard[rowpass-2][colpass+1] = 'X';
 			}
@@ -521,7 +504,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass-2][colpass-1] = 'Y';
 			}
-		else if (board[rowpass-2][colpass-1] =='k' || board[rowpass-2][colpass-1] =='q' || board[rowpass-2][colpass-1] =='b' || board[rowpass-2][colpass-1] =='r' ||board[rowpass-2][colpass-1] =='n' || board[rowpass-2][colpass-1] =='p')
+		else if (seeiflowercase(rowpass-2,colpass-1))
 			{
 			lightboard[rowpass-2][colpass-1] = 'X';
 			}
@@ -532,7 +515,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass+1][colpass+2] = 'Y';
 			}
-		else if (board[rowpass+1][colpass+2] =='k' || board[rowpass+1][colpass+2] =='q' || board[rowpass+1][colpass+2] =='b' || board[rowpass+1][colpass+2] =='r' ||board[rowpass+1][colpass+2] =='n' || board[rowpass+1][colpass+2] =='p')
+		else if (seeiflowercase(rowpass+1,colpass+2))
 			{
 			lightboard[rowpass+1][colpass+2] = 'X';
 			}
@@ -543,7 +526,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass+1][colpass-2] = 'Y';
 			}
-		else if (board[rowpass+1][colpass-2] =='k' || board[rowpass+1][colpass-2] =='q' || board[rowpass+1][colpass-2] =='b' || board[rowpass+1][colpass-2] =='r' ||board[rowpass+1][colpass-2] =='n' || board[rowpass+1][colpass-2] =='p')
+		else if (seeiflowercase(rowpass+1,colpass-2))
 			{
 			lightboard[rowpass+1][colpass-2] = 'X';
 			}
@@ -554,7 +537,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass-1][colpass+2] = 'Y';
 			}
-		else if (board[rowpass-1][colpass+2] =='k' || board[rowpass-1][colpass+2] =='q' || board[rowpass-1][colpass+2] =='b' || board[rowpass-1][colpass+2] =='r' ||board[rowpass-1][colpass+2] =='n' || board[rowpass-1][colpass+2] =='p')
+		else if (seeiflowercase(rowpass-1,colpass+2))
 			{
 			lightboard[rowpass-1][colpass+2] = 'X';
 			}
@@ -565,7 +548,7 @@ void upperknightmove(void){
 			{
 			lightboard[rowpass-1][colpass-2] = 'Y';
 			}
-		else if (board[rowpass-1][colpass-2] =='k' || board[rowpass-1][colpass-2] =='q' || board[rowpass-1][colpass-2] =='b' || board[rowpass-1][colpass-2] =='r' ||board[rowpass-1][colpass-2] =='n' || board[rowpass-1][colpass-2] =='p')
+		else if (seeiflowercase(rowpass-1,colpass-2))
 			{
 			lightboard[rowpass-1][colpass-2] = 'X';
 			}
@@ -581,7 +564,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass+2][colpass+1] = 'Y';
 			}
-		else if (board[rowpass+2][colpass+1] =='K' || board[rowpass+2][colpass+1] =='Q' || board[rowpass+2][colpass+1] =='B' || board[rowpass+2][colpass+1] =='R' ||board[rowpass+2][colpass+1] =='N' || board[rowpass+2][colpass+1] =='P')
+		else if (seeifuppercase(rowpass+2,colpass+1))
 			{
 			lightboard[rowpass+2][colpass+1] = 'X';
 			}
@@ -592,7 +575,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass+2][colpass-1] = 'Y';
 			}
-		else if (board[rowpass+2][colpass-1] =='K' || board[rowpass+2][colpass-1] =='Q' || board[rowpass+2][colpass-1] =='B' || board[rowpass+2][colpass-1] =='R' ||board[rowpass+2][colpass-1] =='N' || board[rowpass+2][colpass-1] =='P')
+		else if (seeifuppercase(rowpass+2,colpass-1))
 			{
 			lightboard[rowpass+2][colpass-1] = 'X';
 			}
@@ -603,7 +586,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass-2][colpass+1] = 'Y';
 			}
-		else if (board[rowpass-2][colpass+1] =='K' || board[rowpass-2][colpass+1] =='Q' || board[rowpass-2][colpass+1] =='B' || board[rowpass-2][colpass+1] =='R' ||board[rowpass-2][colpass+1] =='N' || board[rowpass-2][colpass+1] =='P')
+		else if (seeifuppercase(rowpass-2,colpass+1))
 			{
 			lightboard[rowpass-2][colpass+1] = 'X';
 			}
@@ -614,7 +597,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass-2][colpass-1] = 'Y';
 			}
-		else if (board[rowpass-2][colpass-1] =='K' || board[rowpass-2][colpass-1] =='Q' || board[rowpass-2][colpass-1] =='B' || board[rowpass-2][colpass-1] =='R' ||board[rowpass-2][colpass-1] =='N' || board[rowpass-2][colpass-1] =='P')
+		else if (seeifuppercase(rowpass-2,colpass-1))
 			{
 			lightboard[rowpass-2][colpass-1] = 'X';
 			}
@@ -625,7 +608,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass+1][colpass+2] = 'Y';
 			}
-		else if (board[rowpass+1][colpass+2] =='K' || board[rowpass+1][colpass+2] =='Q' || board[rowpass+1][colpass+2] =='B' || board[rowpass+1][colpass+2] =='R' ||board[rowpass+1][colpass+2] =='N' || board[rowpass+1][colpass+2] =='P')
+		else if (seeifuppercase(rowpass+1,colpass+2))
 			{
 			lightboard[rowpass+1][colpass+2] = 'X';
 			}
@@ -636,7 +619,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass+1][colpass-2] = 'Y';
 			}
-		else if (board[rowpass+1][colpass-2] =='K' || board[rowpass+1][colpass-2] =='Q' || board[rowpass+1][colpass-2] =='B' || board[rowpass+1][colpass-2] =='R' ||board[rowpass+1][colpass-2] =='N' || board[rowpass+1][colpass-2] =='P')
+		else if (seeifuppercase(rowpass+1,colpass-2))
 			{
 			lightboard[rowpass+1][colpass-2] = 'X';
 			}
@@ -647,7 +630,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass-1][colpass+2] = 'Y';
 			}
-		else if (board[rowpass-1][colpass+2] =='K' || board[rowpass-1][colpass+2] =='Q' || board[rowpass-1][colpass+2] =='B' || board[rowpass-1][colpass+2] =='R' ||board[rowpass-1][colpass+2] =='N' || board[rowpass-1][colpass+2] =='P')
+		else if (seeifuppercase(rowpass-1,colpass+2))
 			{
 			lightboard[rowpass-1][colpass+2] = 'X';
 			}
@@ -658,7 +641,7 @@ void lowerknightmove(void){
 			{
 			lightboard[rowpass-1][colpass-2] = 'Y';
 			}
-		else if (board[rowpass-1][colpass-2] =='K' || board[rowpass-1][colpass-2] =='Q' || board[rowpass-1][colpass-2] =='B' || board[rowpass-1][colpass-2] =='R' ||board[rowpass-1][colpass-2] =='N' || board[rowpass-1][colpass-2] =='P')
+		else if (seeifuppercase(rowpass-1,colpass-2))
 			{
 			lightboard[rowpass-1][colpass-2] = 'X';
 			}
@@ -667,6 +650,441 @@ void lowerknightmove(void){
 	printlightboard();
 } //end of lowerknightmove function
 
+void upperbishopmove(void){
+	int nerow = rowpass, necol = colpass, nwrow = rowpass, nwcol = colpass, serow = rowpass, secol = colpass, swrow = rowpass, swcol = colpass;
+	while(nerow >0 && necol >0){ //Northeast Loop 
+		if(seeifuppercase(nerow -1,necol -1))
+			{
+			break;
+			}
+		else if (board[nerow-1][necol-1] == '.')
+			{
+			lightboard[nerow-1][necol-1] = 'Y';
+			}
+		else if(seeiflowercase(nerow -1,necol -1))
+			{
+			lightboard[nerow-1][necol-1] = 'X';
+			break;
+			}
+	nerow--;
+	necol--;
+	}
+	while(nwrow >0 && nwcol <7){ //Northwest Loop 
+		if(seeifuppercase(nwrow -1,nwcol +1))
+			{
+			break;
+			}
+		else if (board[nwrow-1][nwcol+1] == '.')
+			{
+			lightboard[nwrow-1][nwcol+1] = 'Y';
+			}
+		else if(seeiflowercase(nwrow -1,nwcol +1))
+			{
+			lightboard[nwrow-1][nwcol+1] = 'X';
+			break;
+			}
+	nwrow--;
+	nwcol++;
+	}
+	while(serow <7 && secol >0){ //SouthEast Loop 
+		if(seeifuppercase(serow +1,secol -1))
+			{
+			break;
+			}
+		else if (board[serow+1][secol-1] == '.')
+			{
+			lightboard[serow+1][secol-1] = 'Y';
+			}
+		else if(seeiflowercase(serow +1,secol -1))
+			{
+			lightboard[serow+1][secol-1] = 'X';
+			break;
+			}
+	serow++;
+	secol--;
+	}
+	while(swrow <7 && swcol <7){ //Southwest Loop 
+		if(seeifuppercase(swrow +1,swcol +1))
+			{
+			break;
+			}
+		else if (board[swrow+1][swcol+1] == '.')
+			{
+			lightboard[swrow+1][swcol+1] = 'Y';
+			}
+		else if(seeiflowercase(swrow +1,swcol +1))
+			{
+			lightboard[swrow+1][swcol+1] = 'X';
+			break;
+			}
+	swrow++;
+	swcol++;
+	}
+	printboard();
+	printlightboard();
+
+}//end of upperbishopmove function
+
+
+ 	
+void lowerbishopmove(void){
+	int nerow = rowpass, necol = colpass, nwrow = rowpass, nwcol = colpass, serow = rowpass, secol = colpass, swrow = rowpass, swcol = colpass;
+	while(nerow >0 && necol >0){ //Northeast Loop 
+		if(seeiflowercase(nerow -1,necol -1))
+			{
+			break;
+			}
+		else if (board[nerow-1][necol-1] == '.')
+			{
+			lightboard[nerow-1][necol-1] = 'Y';
+			}
+		else if(seeifuppercase(nerow -1,necol -1))
+			{
+			lightboard[nerow-1][necol-1] = 'X';
+			break;
+			}
+	nerow--;
+	necol--;
+	}
+	while(nwrow >0 && nwcol <7){ //Northwest Loop 
+		if(seeiflowercase(nwrow -1,nwcol +1))
+			{
+			break;
+			}
+		else if (board[nwrow-1][nwcol+1] == '.')
+			{
+			lightboard[nwrow-1][nwcol+1] = 'Y';
+			}
+		else if(seeifuppercase(nwrow -1,nwcol +1))
+			{
+			lightboard[nwrow-1][nwcol+1] = 'X';
+			break;
+			}
+	nwrow--;
+	nwcol++;
+	}
+	while(serow <7 && secol >0){ //SouthEast Loop 
+		if(seeiflowercase(serow +1,secol -1))
+			{
+			break;
+			}
+		else if (board[serow+1][secol-1] == '.')
+			{
+			lightboard[serow+1][secol-1] = 'Y';
+			}
+		else if(seeifuppercase(serow +1,secol -1))
+			{
+			lightboard[serow+1][secol-1] = 'X';
+			break;
+			}
+	serow++;
+	secol--;
+	}
+	while(swrow <7 && swcol <7){ //Southwest Loop 
+		if(seeiflowercase(swrow +1,swcol +1))
+			{
+			break;
+			}
+		else if (board[swrow+1][swcol+1] == '.')
+			{
+			lightboard[swrow+1][swcol+1] = 'Y';
+			}
+		else if(seeifuppercase(swrow +1,swcol +1))
+			{
+			lightboard[swrow+1][swcol+1] = 'X';
+			break;
+			}
+	swrow++;
+	swcol++;
+	}
+	printboard();
+	printlightboard();
+}//end of lowerbishopmove function
+
+void upperqueenmove(void){
+int uprow = rowpass, downrow = rowpass, leftcol = colpass, rightcol = colpass, nerow = rowpass, necol = colpass, nwrow = rowpass, nwcol = colpass, serow = rowpass, secol = colpass, swrow = rowpass, swcol = colpass;
+
+
+	//DOWN LOOP (going + in array row)
+	while (downrow < 7){
+		if (seeifuppercase(downrow +1,colpass))
+			{
+			break;
+			}
+		else if( board[downrow +1][colpass] == '.')
+			{
+			lightboard[downrow +1][colpass] = 'Y';
+			}
+		else if (seeiflowercase(downrow +1,colpass))
+			{
+			lightboard[downrow +1][colpass] = 'X';
+			break;
+			}
+	downrow++;
+	}
+	//UP LOOP (going - in array row)
+	while (uprow >0){
+		if (seeifuppercase(uprow -1,colpass))
+			{
+			break;
+			}
+		else if( board[uprow -1][colpass] == '.')
+			{
+			lightboard[uprow - 1][colpass] = 'Y';
+			}
+		else if (seeiflowercase(uprow -1,colpass))
+			{
+			lightboard[uprow -1][colpass] = 'X';
+			break;
+			}
+	uprow--;
+	}
+	//LEFT LOOP
+	while(leftcol >0){
+		if(seeifuppercase(rowpass,leftcol -1))
+			{
+			break;
+			}
+		else if (board[rowpass][leftcol -1] == '.')
+			{
+			lightboard[rowpass][leftcol -1] ='Y';
+			}
+		else if (seeiflowercase(rowpass,leftcol -1))
+			{
+			lightboard[rowpass][leftcol -1] ='X';
+			break;
+			}
+	leftcol--;
+	}
+	//RIGHT LOOP
+	while(rightcol < 7){
+		if (seeifuppercase(rowpass,rightcol +1))
+			{
+			break;
+			}
+		else if (board[rowpass][rightcol +1] =='.')
+			{
+			lightboard[rowpass][rightcol +1] = 'Y';
+			}
+		else if(seeiflowercase(rowpass,rightcol +1))
+			{
+			lightboard[rowpass][rightcol +1] = 'X';
+			break;
+			}
+	rightcol++;
+	}
+	while(nerow >0 && necol >0){ //Northeast Loop 
+		if(seeifuppercase(nerow -1,necol -1))
+			{
+			break;
+			}
+		else if (board[nerow-1][necol-1] == '.')
+			{
+			lightboard[nerow-1][necol-1] = 'Y';
+			}
+		else if(seeiflowercase(nerow -1,necol -1))
+			{
+			lightboard[nerow-1][necol-1] = 'X';
+			break;
+			}
+	nerow--;
+	necol--;
+	}
+	while(nwrow >0 && nwcol <7){ //Northwest Loop 
+		if(seeifuppercase(nwrow -1,nwcol +1))
+			{
+			break;
+			}
+		else if (board[nwrow-1][nwcol+1] == '.')
+			{
+			lightboard[nwrow-1][nwcol+1] = 'Y';
+			}
+		else if(seeiflowercase(nwrow -1,nwcol +1))
+			{
+			lightboard[nwrow-1][nwcol+1] = 'X';
+			break;
+			}
+	nwrow--;
+	nwcol++;
+	}
+	while(serow <7 && secol >0){ //SouthEast Loop 
+		if(seeifuppercase(serow +1,secol -1))
+			{
+			break;
+			}
+		else if (board[serow+1][secol-1] == '.')
+			{
+			lightboard[serow+1][secol-1] = 'Y';
+			}
+		else if(seeiflowercase(serow +1,secol -1))
+			{
+			lightboard[serow+1][secol-1] = 'X';
+			break;
+			}
+	serow++;
+	secol--;
+	}
+	while(swrow <7 && swcol <7){ //Southwest Loop 
+		if(seeifuppercase(swrow +1,swcol +1))
+			{
+			break;
+			}
+		else if (board[swrow+1][swcol+1] == '.')
+			{
+			lightboard[swrow+1][swcol+1] = 'Y';
+			}
+		else if(seeiflowercase(swrow +1,swcol +1))
+			{
+			lightboard[swrow+1][swcol+1] = 'X';
+			break;
+			}
+	swrow++;
+	swcol++;
+	}
+	printboard();
+	printlightboard();
+}//end of upper queen move function
+void lowerqueenmove(void){
+int uprow = rowpass, downrow = rowpass, leftcol = colpass, rightcol = colpass, nerow = rowpass, necol = colpass, nwrow = rowpass, nwcol = colpass, serow = rowpass, secol = colpass, swrow = rowpass, swcol = colpass;
+	//DOWN LOOP (going + in array row)
+	while (downrow < 7){
+		if (seeiflowercase(downrow +1,colpass))
+			{
+			break;
+			}
+		else if( board[downrow +1][colpass] == '.')
+			{
+			lightboard[downrow +1][colpass] = 'Y';
+			}
+		else if (seeifuppercase(downrow +1,colpass))
+			{
+			lightboard[downrow +1][colpass] = 'X';
+			break;
+			}
+	downrow++;
+	}
+	//UP LOOP (going - in array row)
+	while (uprow >0){
+		if (seeiflowercase(uprow -1,colpass))
+			{
+			break;
+			}
+		else if( board[uprow -1][colpass] == '.')
+			{
+			lightboard[uprow - 1][colpass] = 'Y';
+			}
+		else if (seeifuppercase(uprow -1,colpass))
+			{
+			lightboard[uprow -1][colpass] = 'X';
+			break;
+			}
+	uprow--;
+	}
+	//LEFT LOOP
+	while(leftcol >0){
+		if(seeiflowercase(rowpass,leftcol -1))
+			{
+			break;
+			}
+		else if (board[rowpass][leftcol -1] == '.')
+			{
+			lightboard[rowpass][leftcol -1] ='Y';
+			}
+		else if (seeifuppercase(rowpass,leftcol -1))
+			{
+			lightboard[rowpass][leftcol -1] ='X';
+			break;
+			}
+	leftcol--;
+	}
+	//RIGHT LOOP
+	while(rightcol < 7){
+		if (seeiflowercase(rowpass,rightcol +1))
+			{
+			break;
+			}
+		else if (board[rowpass][rightcol +1] =='.')
+			{
+			lightboard[rowpass][rightcol +1] = 'Y';
+			}
+		else if(seeifuppercase(rowpass,rightcol +1))
+			{
+			lightboard[rowpass][rightcol +1] = 'X';
+			break;
+			}
+	rightcol++;
+	}
+		while(nerow >0 && necol >0){ //Northeast Loop 
+		if(seeiflowercase(nerow -1,necol -1))
+			{
+			break;
+			}
+		else if (board[nerow-1][necol-1] == '.')
+			{
+			lightboard[nerow-1][necol-1] = 'Y';
+			}
+		else if(seeifuppercase(nerow -1,necol -1))
+			{
+			lightboard[nerow-1][necol-1] = 'X';
+			break;
+			}
+	nerow--;
+	necol--;
+	}
+	while(nwrow >0 && nwcol <7){ //Northwest Loop 
+		if(seeiflowercase(nwrow -1,nwcol +1))
+			{
+			break;
+			}
+		else if (board[nwrow-1][nwcol+1] == '.')
+			{
+			lightboard[nwrow-1][nwcol+1] = 'Y';
+			}
+		else if(seeifuppercase(nwrow -1,nwcol +1))
+			{
+			lightboard[nwrow-1][nwcol+1] = 'X';
+			break;
+			}
+	nwrow--;
+	nwcol++;
+	}
+	while(serow <7 && secol >0){ //SouthEast Loop 
+		if(seeiflowercase(serow +1,secol -1))
+			{
+			break;
+			}
+		else if (board[serow+1][secol-1] == '.')
+			{
+			lightboard[serow+1][secol-1] = 'Y';
+			}
+		else if(seeifuppercase(serow +1,secol -1))
+			{
+			lightboard[serow+1][secol-1] = 'X';
+			break;
+			}
+	serow++;
+	secol--;
+	}
+	while(swrow <7 && swcol <7){ //Southwest Loop 
+		if(seeiflowercase(swrow +1,swcol +1))
+			{
+			break;
+			}
+		else if (board[swrow+1][swcol+1] == '.')
+			{
+			lightboard[swrow+1][swcol+1] = 'Y';
+			}
+		else if(seeifuppercase(swrow +1,swcol +1))
+			{
+			lightboard[swrow+1][swcol+1] = 'X';
+			break;
+			}
+	swrow++;
+	swcol++;
+	}
+	printboard();
+	printlightboard();
+}//end of lower queen move function
 void engine(char piece){ 
 	char willdo;
 	if (piece == 'p')
@@ -693,13 +1111,29 @@ void engine(char piece){
 		{
 		lowerknightmove();
 		}
+	else if (piece == 'B')
+		{
+		upperbishopmove();
+		}
+	else if (piece == 'b')
+		{
+		lowerbishopmove();
+		}
+	else if (piece == 'q')
+		{
+		lowerqueenmove();
+		}
+	else if (piece == 'Q')
+		{
+		upperqueenmove();
+		}
+
 	else
 		{
 		return;
 		}
 	bool breakerbool = 0;
-	while(1){ //need to only be able to move peice where it can go
-
+	while(1){ //need to only be able to move peice where it can go as marked by Xs and Ys on the lightboard
 	string mover;
 	cout<<"enter coordianate to move peice"<<endl;
 	getline(cin,mover);
@@ -720,7 +1154,6 @@ void engine(char piece){
 			cout<<"you cannot move there"<<endl;
 			printlightboard();
 			}
-
 		}
 	else
 		{
