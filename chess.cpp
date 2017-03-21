@@ -3,10 +3,11 @@
 using namespace std;
 string command;
 char id;
-int rowpass, colpass, lightrowpass, lightcolpass;
-char board [8][8] = {{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','B','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
-char lightboard[8][8] ={{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','B','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
+int rowpass, colpass, lightrowpass, lightcolpass, turncounter = 0;
+char board [8][8] = {{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
+char lightboard[8][8] ={{'R','N','B','K','Q','B','N','R'},	{'P','P','P','P','P','P','P','P'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'.','.','.','.','.','.','.','.'},{'p','p','p','p','p','p','p','p'},{'r','n','b','k','q','b','n','r'}};
 bool pa =0, pb= 0, pc =0, pd =0, pe =0, pf =0, pg =0, ph =0, PA =0, PB =0, PC =0, PD =0, PE =0, PF =0, PG =0, PH = 0;
+bool gamestart = false, flipflop;
 void printboard (void){
 	int col, row;	
 	cout<<"    Board"<<endl;
@@ -280,7 +281,6 @@ if (seeifuppercase(rowpass -1,colpass +1))
 				{
 				if (lightboard[rowpass-(steps+1)][colpass] == '.')
 					{
-cout<<"304 & steps="<<steps<<endl;
 					lightboard[rowpass-(steps+1)][colpass] = 'Y';
 					}
 				}
@@ -1085,6 +1085,193 @@ int uprow = rowpass, downrow = rowpass, leftcol = colpass, rightcol = colpass, n
 	printboard();
 	printlightboard();
 }//end of lower queen move function
+
+void upperkingmove(void){
+int row = rowpass, col = colpass;
+	if(row-1 >0) //UP
+		{
+		if(seeiflowercase(row-1, col))
+			{
+			lightboard[row-1][col] ='X';
+			}
+		else if(board[row-1][col] ='.')
+			{
+			lightboard[row-1][col] ='Y';
+			}
+		}
+	if(row-1 >0 && col+1 <7) //UP & RIGHT
+		{
+		if(seeiflowercase(row-1, col+1))
+			{
+			lightboard[row-1][col+1] ='X';
+			}
+		else if(board[row-1][col+1] ='.')
+			{
+			lightboard[row-1][col+1] ='Y';
+			}
+		}
+	if(row-1 >0 && col-1 >0) //UP & LEFT
+		{
+		if(seeiflowercase(row-1, col-1))
+			{
+			lightboard[row-1][col-1] ='X';
+			}
+		else if(board[row-1][col-1] ='.')
+			{
+			lightboard[row-1][col-1] ='Y';
+			}
+		}
+	if(col+1 <7) //RIGHT
+		{
+		if(seeiflowercase(row, col+1))
+			{
+			lightboard[row][col+1] ='X';
+			}
+		else if(board[row][col+1] ='.')
+			{
+			lightboard[row][col+1] ='Y';
+			}
+		}
+	if(col-1 >0) //LEFT
+		{
+		if(seeiflowercase(row, col-1))
+			{
+			lightboard[row][col-1] ='X';
+			}
+		else if(board[row][col-1] ='.')
+			{
+			lightboard[row][col-1] ='Y';
+			}
+		}
+	if(row+1 <7) //DOWN
+		{
+		if(seeiflowercase(row+1, col))
+			{
+			lightboard[row+1][col] ='X';
+			}
+		else if(board[row+1][col] ='.')
+			{
+			lightboard[row+1][col] ='Y';
+			}
+		}
+	if(row+1 <7 && col+1 <7) //DOWN & RIGHT
+		{
+		if(seeiflowercase(row+1, col+1))
+			{
+			lightboard[row+1][col+1] ='X';
+			}
+		else if(board[row+1][col+1] ='.')
+			{
+			lightboard[row+1][col+1] ='Y';
+			}
+		}
+	if(row+1 <7 && col-1 >0) //DOWN & LEFT
+		{
+		if(seeiflowercase(row+1, col-1))
+			{
+			lightboard[row+1][col-1] ='X';
+			}
+		else if(board[row+1][col-1] ='.')
+			{
+			lightboard[row+1][col-1] ='Y';
+			}
+		}
+	printboard();
+	printlightboard();
+} // end of upper king move function
+void lowerkingmove(void){
+int row = rowpass, col = colpass;
+	if(row-1 >0) //UP
+		{
+		if(seeifuppercase(row-1, col))
+			{
+			lightboard[row-1][col] ='X';
+			}
+		else if(board[row-1][col] ='.')
+			{
+			lightboard[row-1][col] ='Y';
+			}
+		}
+	if(row-1 >0 && col+1 <7) //UP & RIGHT
+		{
+		if(seeifuppercase(row-1, col+1))
+			{
+			lightboard[row-1][col+1] ='X';
+			}
+		else if(board[row-1][col+1] ='.')
+			{
+			lightboard[row-1][col+1] ='Y';
+			}
+		}
+	if(row-1 >0 && col-1 >0) //UP & LEFT
+		{
+		if(seeifuppercase(row-1, col-1))
+			{
+			lightboard[row-1][col-1] ='X';
+			}
+		else if(board[row-1][col-1] ='.')
+			{
+			lightboard[row-1][col-1] ='Y';
+			}
+		}
+	if(col+1 <7) //RIGHT
+		{
+		if(seeifuppercase(row, col+1))
+			{
+			lightboard[row][col+1] ='X';
+			}
+		else if(board[row][col+1] ='.')
+			{
+			lightboard[row][col+1] ='Y';
+			}
+		}
+	if(col-1 >0) //LEFT
+		{
+		if(seeifuppercase(row, col-1))
+			{
+			lightboard[row][col-1] ='X';
+			}
+		else if(board[row][col-1] ='.')
+			{
+			lightboard[row][col-1] ='Y';
+			}
+		}
+	if(row+1 <7) //DOWN
+		{
+		if(seeifuppercase(row+1, col))
+			{
+			lightboard[row+1][col] ='X';
+			}
+		else if(board[row+1][col] ='.')
+			{
+			lightboard[row+1][col] ='Y';
+			}
+		}
+	if(row+1 <7 && col+1 <7) //DOWN & RIGHT
+		{
+		if(seeifuppercase(row+1, col+1))
+			{
+			lightboard[row+1][col+1] ='X';
+			}
+		else if(board[row+1][col+1] ='.')
+			{
+			lightboard[row+1][col+1] ='Y';
+			}
+		}
+	if(row+1 <7 && col-1 >0) //DOWN & LEFT
+		{
+		if(seeifuppercase(row+1, col-1))
+			{
+			lightboard[row+1][col-1] ='X';
+			}
+		else if(board[row+1][col-1] ='.')
+			{
+			lightboard[row+1][col-1] ='Y';
+			}
+		}
+	printboard();
+	printlightboard();
+}//end of lowerkingmove function
 void engine(char piece){ 
 	char willdo;
 	if (piece == 'p')
@@ -1127,7 +1314,14 @@ void engine(char piece){
 		{
 		upperqueenmove();
 		}
-
+	else if (piece == 'k')
+		{
+		lowerkingmove();
+		}
+	else if (piece == 'K')
+		{
+		upperkingmove();
+		}
 	else
 		{
 		return;
@@ -1152,7 +1346,8 @@ void engine(char piece){
 		else
 			{
 			cout<<"you cannot move there"<<endl;
-			printlightboard();
+			lightreset();
+			printboard();
 			}
 		}
 	else
@@ -1192,16 +1387,56 @@ int main() {
 		}
 	if (command.substr(0, 1) >= "a" && command.substr(0, 1) <= "h" && command.substr(1, 1) >= "1" && command.substr(1, 1) <= "8")
 		{
-		cout<<"coordiate"<<endl;
-		if (id == '.')
+		if (gamestart ==true)
+			{
+			if((id=='K' || id=='Q'|| id=='B' || id=='N' || id=='R' || id=='P') && flipflop == false)
+				{
+				cout<<"lowercase turn, not uppercase"<<endl;
+				continue;
+				}
+			if((id=='k' || id=='q'|| id=='b' || id=='n' || id=='r' || id=='p')&& flipflop == true)
+				{
+				cout<<"uppercase turn, not lowercase"<<endl;
+				continue;
+				}
+			}
+		if (gamestart == false)
+			{
+			if(id=='K' || id=='Q'|| id=='B' || id=='N' || id=='R' || id=='P')
+				{
+				cout<<"uppercase first"<<endl;
+				flipflop = true;//uppercase has first move
+				gamestart = true;
+				}
+			else if(id=='k' || id=='q'|| id=='b' || id=='n' || id=='r' || id=='p')
+				{
+				cout<<"lowercase first"<<endl;
+				flipflop = false; //lowercase goes first
+				gamestart = true;
+				}
+			else
+				{
+				cout<<"You picked an empty space."<<endl;
+				continue;
+				}
+			}
+		if(id =='.')
 			{
 			cout<<"You picked an empty space."<<endl;
 			continue;
 			}
 		else
 			{
-		cout<<"the selected piece is "<<id<<endl;
-		engine(id);
+			cout<<"the selected piece is "<<id<<endl;
+			engine(id);
+			if (flipflop == true)
+				{
+				flipflop = false;
+				}
+			else
+				{
+				flipflop = true;
+				}
 			}
 		}
 	else
